@@ -1,0 +1,45 @@
+@host = http://localhost:5000
+
+### 1. Создание пользователя
+POST {{host}}/user
+Content-Type: application/json
+
+{
+  "Login": "example_user",
+  "PassHash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
+}
+
+### 2. Повторное создание с тем же логином — ожидаем 409
+POST {{host}}/user
+Content-Type: application/json
+
+{
+  "Login": "example_user",
+  "PassHash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
+}
+
+### 3. Невалидный хеш — ожидаем 400
+POST {{host}}/user
+Content-Type: application/json
+
+{
+  "Login": "bad_user",
+  "PassHash": "123456"
+}
+
+### 4. Получение пользователя
+GET {{host}}/user/1
+
+### 5. Обновление
+PUT {{host}}/user/1
+Content-Type: application/json
+
+{
+  "Login": "renamed_user"
+}
+
+### 6. Удаление
+DELETE {{host}}/user/1
+
+### 7. Запрос несуществующего — ожидаем 404
+GET {{host}}/user/999
